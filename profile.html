@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<head>
+    <title> Bull Shit App</title>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <img src="../templates/image/sita logo.jpg" alt="Logo">
+    </a>
+</nav>
+<div id="overlay">
+  <div class="overlay-content">
+    <li> dawd </li>
+  </div>
+</div>
+<div class="container-3">
+  <div class="profile">
+    <div class="profile-picture">
+      <img src="profile-picture.jpg" alt="Profile Picture">
+    </div>
+    <div class="profile-info">
+      <h1>John Doe</h1>
+      <p>Software Developer</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac fringilla velit.</p>
+    </div>
+  </div>
+</div>
+  <div class="bottom-navbar">
+    <nav>
+      <ul>
+        <li><a href="chat.html" class="menu-item">แชท</a></li>
+        <li><a href="#" class="menu-item" onclick="scrollToSearch()">ค้นหา</a></li>
+        <li><a href="index.html" class="menu-item">หน้าหลัก</a></li>
+        <li><a href="invesment.html" class="menu-item">การลงทุน</a></li>
+        <li><a href="profile.html" class="menu-item">โปรไฟล์</a></li>
+      </ul>
+    </nav>
+  </div>
+  <script>
+      var currentPageUrl = window.location.href;
+
+// Get all menu items
+var menuItems = document.getElementsByClassName("menu-item");
+
+// Iterate over menu items and add 'active' class to the matching item
+for (var i = 0; i < menuItems.length; i++) {
+  var menuItemUrl = menuItems[i].href;
+
+  if (currentPageUrl === menuItemUrl) {
+    menuItems[i].classList.add("active");
+  } else {
+    menuItems[i].classList.remove("active");
+  }
+}
+  </script>
+</body>

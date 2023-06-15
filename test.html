@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Online Shop with Cart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1, h2, h3 {
+      color: #333;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .product {
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .product h3 {
+      margin-top: 0;
+    }
+
+    .product p {
+      color: #666;
+    }
+
+    .product .price {
+      font-weight: bold;
+    }
+
+    .product img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .add-to-cart {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .add-to-cart:hover {
+      background-color: #45a049;
+    }
+
+    .cart-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 14px;
+      margin-left: 10px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cart-icon i {
+      margin-top: 2px;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      color: white;
+      font-size: 12px;
+      border-radius: 50%;
+    }
+
+    .cart-dropdown {
+      position: absolute;
+      top: 40px;
+      right: 0;
+      width: 300px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      display: none;
+      z-index: 1;
+    }
+
+    .cart-icon:hover + .cart-dropdown,
+    .cart-dropdown:hover {
+      display: block;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .cart-item img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+
+    .cart-item p {
+      margin: 0;
+    }
+
+    .cart-item .remove-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .cart-item .remove-btn:hover {
+      background-color: #e53935;
+    }
+
+    .checkout-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .checkout-btn:hover {
+      background-color: #45a049;
+    }
+
+    .total-price {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to our Online Shop!</h1>
+
+  <div class="products">
+    <div class="product">
+      <h3>Product 1</h3>
+      <img src="product1.jpg" alt="Product 1">
+      <p>Description of Product 1</p>
+      <p class="price">$10.00</p>
+      <button class="add-to-cart" data-product="1" data-price="10.00" data-description="Description of Product 1" data-image="product1.jpg">Add to Cart</button>
+    </div>
+    <div class="product">
+      <h3>Product 2</h3>
+      <img src="product2.jpg" alt="Product 2">
+      <p>Description of Product 2</p>
+      <p class="price">$15.00</p>
+      <button class="add-to-cart" data-product="2" data-price="15.00" data-description="Description of Product 2" data-image="product2.jpg">Add to Cart</button>
+    </div>
+    <div class="product">
+      <h3>Product 3</h3>
+      <img src="product3.jpg" alt="Product 3">
+      <p>Description of Product 3</p>
+      <p class="price">$20.00</p>
+      <button class="add-to-cart" data-product="3" data-price="20.00" data-description="Description of Product 3" data-image="product3.jpg">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="cart-icon">
+    <i class="fas fa-shopping-cart"></i>
+    <div class="cart-count" id="cart-count">0</div>
+    <div class="cart-dropdown" id="cart-dropdown"></div>
+  </div>
+
+  <script>
+    var cartItems = [];
+    var cartPrices = {};
+    var cartDescriptions = {};
+    var cartImages = {};
+    var cartIcon = document.querySelector('.cart-icon');
+    var cartCount = document.getElementById('cart-count');
+    var cartDropdown = document.getElementById('cart-dropdown');
+
+    function addToCart(productId, price, description, image) {
+      if (!cartItems.includes(productId)) {
+        cartItems.push(productId);
+        cartPrices[productId] = price;
+        cartDescriptions[productId] = description;
+        cartImages[productId] = image;
+        updateCart();
+      }
+    }
+
+    function removeFromCart(productId) {
+      var index = cartItems.indexOf(productId);
+      if (index > -1) {
+        cartItems.splice(index, 1);
+        delete cartPrices[productId];
+        delete cartDescriptions[productId];
+        delete cartImages[productId];
+        updateCart();
+      }
+    }
+
+    function updateCart() {
+      cartCount.textContent = cartItems.length;
+
+      if (cartItems.length > 0) {
+        var cartHtml = '';
+
+        cartItems.forEach(function(item) {
+          cartHtml += '<div class="cart-item">';
+          cartHtml += '<img src="' + cartImages[item] + '" alt="Product Image">';
+          cartHtml += '<div>';
+          cartHtml += '<p>Product ' + item + '</p>';
+          cartHtml += '<p>' + cartDescriptions[item] + '</p>';
+          cartHtml += '<p>$' + cartPrices[item] + '</p>';
+          cartHtml += '<button class="remove-btn" onclick="removeFromCart(' + item + ')">Remove</button>';
+          cartHtml += '</div>';
+          cartHtml += '</div>';
+        });
+
+        var totalPrice = Object.values(cartPrices).reduce(function(acc, price) {
+          return acc + parseFloat(price);
+        }, 0);
+
+        cartHtml += '<div class="total-price">Total: $' + totalPrice.toFixed(2) + '</div>';
+        cartHtml += '<button class="checkout-btn">Checkout</button>';
+
+        cartDropdown.innerHTML = cartHtml;
+      } else {
+        cartDropdown.innerHTML = '<p>Your cart is empty.</p>';
+      }
+    }
+
+    var addToCartButtons = document.getElementsByClassName('add-to-cart');
+    for (var i = 0; i < addToCartButtons.length; i++) {
+      addToCartButtons[i].addEventListener('click', function() {
+        var productId = this.getAttribute('data-product');
+        var price = this.getAttribute('data-price');
+        var description = this.getAttribute('data-description');
+        var image = this.getAttribute('data-image');
+        addToCart(productId, price, description, image);
+      });
+    }
+
+    cartIcon.addEventListener('mouseenter', function() {
+      cartDropdown.style.display = 'block';
+    });
+
+    cartIcon.addEventListener('mouseleave', function() {
+      cartDropdown.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

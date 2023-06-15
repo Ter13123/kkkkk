@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web Board</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .board {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .post {
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .post .title {
+      font-weight: bold;
+    }
+    .post .content {
+      margin-top: 5px;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    .input-group input,
+    .input-group textarea {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+    }
+    .input-group button {
+      padding: 5px 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .comment {
+      margin-top: 10px;
+      padding-top: 5px;
+      border-top: 1px solid #ddd;
+    }
+    .comment-input {
+      margin-top: 5px;
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      resize: vertical;
+    }
+    .comment-button {
+      margin-top: 5px;
+      padding: 5px 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .image-preview {
+      max-width: 100%;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <img src="../template/image/icon.png" alt="Logo">
+    </a>
+      <div class="dropdown">
+        <button href="course.html" class="dropbtn">course</button>
+        <div class="dropdown-content">
+          <a href="#">Course</a>
+          <div class="sub-dropdown">
+            <a href="course.html">Free Course</a>
+            <div class="sub-dropdown-content">
+              <a href="#">General Subject</a>
+              <a href="#">Photography</a>
+              <a href="#">Technology</a>
+              <a href="#">Bussiness</a>
+              <a href="#">Creative</a>
+              <a href="#">Cooking</a>
+              <a href="#">Music</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">find an expert</button>
+        <div class="dropdown-content">
+          <a href="#">Option 1</a>
+          <a href="#">Option 2</a>
+          <a href="#">Option 3</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropbtn">Web board</button>
+        <div class="dropdown-content">
+          <a href="board.html">Option 1</a>
+        </div>
+      </div>
+
+    <div class="search-container">
+      <input type="text" id="search-bar" placeholder="Search...">
+    </div>
+    <a href="login.php" class="login-button">Login</a>
+    <a href="signup.html" class="register-button">Register</a>
+</nav>
+<div class="board">
+  <div class="input-group">
+    <input type="text" id="postTitle" placeholder="Enter post title">
+    <input type="file" id="postImage" accept="image/*">
+    <button onclick="createPost()">Create Post</button>
+  </div>
+  <div id="postContainer"></div>
+</div>
+
+<script>
+  function createPost() {
+    var titleInput = document.getElementById("postTitle");
+    var title = titleInput.value.trim();
+    if (title !== "") {
+      var postContainer = document.getElementById("postContainer");
+      
+      var postDiv = document.createElement("div");
+      postDiv.classList.add("post");
+
+      var titleDiv = document.createElement("div");
+      titleDiv.classList.add("title");
+      titleDiv.innerText = title;
+
+      var contentDiv = document.createElement("div");
+      contentDiv.classList.add("content");
+
+      var commentContainer = document.createElement("div");
+      commentContainer.classList.add("comment");
+
+      var commentTextarea = document.createElement("textarea");
+      commentTextarea.classList.add("comment-input");
+      commentTextarea.placeholder = "Enter comment";
+
+      var commentButton = document.createElement("button");
+      commentButton.classList.add("comment-button");
+      commentButton.innerText = "Add Comment";
+      commentButton.onclick = function() {
+        addComment(commentTextarea, commentContainer);
+      };
+
+      var imageInput = document.getElementById("postImage");
+      var imagePreview = document.createElement("img");
+      imagePreview.classList.add("image-preview");
+
+      if (imageInput.files && imageInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+      }
+
+      contentDiv.innerText = commentTextarea.value;
+      if (imagePreview.src !== "") {
+        contentDiv.appendChild(document.createElement("br"));
+        contentDiv.appendChild(imagePreview);
+      }
+
+      postDiv.appendChild(titleDiv);
+      postDiv.appendChild(contentDiv);
+      postDiv.appendChild(commentTextarea);
+      postDiv.appendChild(commentButton);
+      postDiv.appendChild(commentContainer);
+      postContainer.appendChild(postDiv);
+
+      titleInput.value = "";
+      imageInput.value = null;
+    }
+  }
+
+  function addComment(textarea, container) {
+    var comment = textarea.value.trim();
+    if (comment !== "") {
+      var commentDiv = document.createElement("div");
+      commentDiv.innerText = comment;
+
+      var imageInput = document.createElement("input");
+      imageInput.type = "file";
+      imageInput.accept = "image/*";
+
+      var imagePreview = document.createElement("img");
+      imagePreview.classList.add("image-preview");
+
+      if (imageInput.files && imageInput.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+      }
+
+      var commentButton = document.createElement("button");
+      commentButton.classList.add("comment-button");
+      commentButton.innerText = "Add Image";
+      commentButton.onclick = function() {
+        addImage(commentDiv, imageInput, imagePreview);
+      };
+
+      commentDiv.appendChild(imageInput);
+      commentDiv.appendChild(imagePreview);
+      commentDiv.appendChild(commentButton);
+      container.appendChild(commentDiv);
+      textarea.value = "";
+    }
+  }
+
+  function addImage(commentDiv, imageInput, imagePreview) {
+    if (imageInput.files && imageInput.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(imageInput.files[0]);
+    }
+  }
+</script>
+</body>
+</html>
+
+
+
+
+
+
